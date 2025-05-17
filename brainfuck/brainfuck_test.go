@@ -1,16 +1,16 @@
 package main
 
 import (
-	"math"
 	"testing"
 )
 
-func TestAbs(t *testing.T) {
-	// Default test, doesn't actually have anything to do with brainfuck
-	expected := 1
-	actual := int(math.Abs(-1))
+func TestGetBFCode(t *testing.T) {
+	// Test file io
+	var expected string = "++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>.>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.>++."
+	var actual string = getBFCode("../Examples/helloWorld.bf")
+
 	if expected != actual {
-		t.Errorf("Abs(-1) = %d; want 1", actual)
+		t.Errorf("Expected: %s\n Actual: %s", expected, actual)
 	}
 }
 
@@ -75,15 +75,5 @@ func TestTokenizeWithNewLines(t *testing.T) {
 			t.Errorf("Token at index %d does not match. Expected {%s, %d, %d}. Actual {%s, %d, %d}",
 				i, expected[i].token, expected[i].row, expected[i].col, actual[i].token, actual[i].row, actual[i].col)
 		}
-	}
-}
-
-func TestGetBFCode(t *testing.T) {
-	// Test file io
-	var expected string = "++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>.>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.>++."
-	var actual string = getBFCode("../Examples/helloWorld.bf")
-
-	if expected != actual {
-		t.Errorf("Expected: %s\n Actual: %s", expected, actual)
 	}
 }
