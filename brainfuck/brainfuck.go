@@ -5,6 +5,12 @@ import (
 	"os"
 )
 
+type Token struct {
+	token string
+	row   int
+	col   int
+}
+
 func getBFCode(filename string) string {
 	// Read file
 	fileBytes, err := os.ReadFile(filename)
@@ -16,6 +22,10 @@ func getBFCode(filename string) string {
 	codeString := string(fileBytes)
 
 	return codeString
+}
+
+func tokenize(code string) []Token {
+	return make([]Token, 0)
 }
 
 func main() {
