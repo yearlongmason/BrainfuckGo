@@ -16,8 +16,8 @@ func TestAbs(t *testing.T) {
 
 func TestTokenize(t *testing.T) {
 	codeToTokenize := "><+-.,[]"
-	expected := []Token{{"<", 1, 1}, {"<", 1, 2}, {"<", 1, 3}, {"<", 1, 4},
-		{"<", 1, 5}, {"<", 1, 6}, {"<", 1, 7}, {"<", 1, 8}}
+	expected := []Token{{">", 1, 1}, {"<", 1, 2}, {"+", 1, 3}, {"-", 1, 4},
+		{".", 1, 5}, {",", 1, 6}, {"[", 1, 7}, {"]", 1, 8}}
 	actual := tokenize(codeToTokenize)
 
 	// Check that the lengths of the slices are equal
@@ -37,8 +37,8 @@ func TestTokenize(t *testing.T) {
 
 func TestTokenizeWithCharacters(t *testing.T) {
 	codeToTokenize := "><+-abcd.,[]This code should not be tokenized because it is a comment"
-	expected := []Token{{"<", 1, 1}, {"<", 1, 2}, {"<", 1, 3}, {"<", 1, 4},
-		{"<", 1, 9}, {"<", 1, 10}, {"<", 1, 11}, {"<", 1, 12}}
+	expected := []Token{{">", 1, 1}, {"<", 1, 2}, {"+", 1, 3}, {"-", 1, 4},
+		{".", 1, 9}, {",", 1, 10}, {"[", 1, 11}, {"]", 1, 12}}
 	actual := tokenize(codeToTokenize)
 
 	// Check that the lengths of the slices are equal
@@ -58,9 +58,9 @@ func TestTokenizeWithCharacters(t *testing.T) {
 
 func TestTokenizeWithNewLines(t *testing.T) {
 	codeToTokenize := "><+-abcd.,[]\nThis code should not be tokenized because it is a comment\n><.,"
-	expected := []Token{{"<", 1, 1}, {"<", 1, 2}, {"<", 1, 3}, {"<", 1, 4},
-		{"<", 1, 9}, {"<", 1, 10}, {"<", 1, 11}, {"<", 1, 12},
-		{"<", 3, 1}, {"<", 3, 2}, {"<", 3, 3}, {"<", 3, 4}}
+	expected := []Token{{">", 1, 1}, {"<", 1, 2}, {"+", 1, 3}, {"-", 1, 4},
+		{".", 1, 9}, {",", 1, 10}, {"[", 1, 11}, {"]", 1, 12},
+		{">", 3, 1}, {"<", 3, 2}, {".", 3, 3}, {",", 3, 4}}
 	actual := tokenize(codeToTokenize)
 
 	// Check that the lengths of the slices are equal

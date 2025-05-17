@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"strings"
 )
 
 type Token struct {
@@ -25,7 +26,21 @@ func getBFCode(filename string) string {
 }
 
 func tokenize(code string) []Token {
-	return make([]Token, 0)
+	codeLines := strings.Split(code, "\n")
+	tokens := make([]Token, 0)
+
+	// Loop through each line of brainfuck code
+	for row, line := range codeLines {
+		// Loop through each column (index) of each row
+		for col := 0; col < len(line); col++ {
+			// If the current character is a brainfuck character create a token and add it to tokens
+			if strings.Contains("><+-.,[]", string(codeLines[row][col])) {
+				tokens = append(tokens, Token{string(codeLines[row][col]), row + 1, col + 1})
+			}
+		}
+	}
+
+	return tokens
 }
 
 func main() {
