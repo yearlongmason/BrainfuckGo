@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"strings"
@@ -10,6 +11,13 @@ type Token struct {
 	token string
 	row   int
 	col   int
+}
+
+func getMatchingBrackets(tokens []Token) (map[int]int, error) {
+	bracketPairs := make(map[int]int)
+	testError := errors.New("Unmatched token!")
+
+	return bracketPairs, testError
 }
 
 func getBFCode(filename string) string {
