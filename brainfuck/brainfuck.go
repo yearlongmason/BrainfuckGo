@@ -15,9 +15,34 @@ type Token struct {
 
 func getMatchingBrackets(tokens []Token) (map[int]int, error) {
 	bracketPairs := make(map[int]int)
-	testError := errors.New("Unmatched token!")
+	tokenStack := make([]int, 0)
+	var lastIndex int
 
-	return bracketPairs, testError
+	// Loop through all tokens
+	for i, token := range tokens {
+		// If the current token is [ append it to the stack
+		switch token.token {
+		case "[":
+			tokenStack = append(tokenStack, i)
+		case "]":
+			// If there is no bracket index to pop off, return an error
+			if len(tokenStack) == 0 {
+				return bracketPairs, errors.New("unmatched brackets")
+			}
+			// Pop token off the end
+			tokenStack, lastIndex = tokenStack[:len(tokenStack)-1], tokenStack[len(tokenStack)-1]
+			// Add bracket matches to the map
+			bracketPairs[i] = lastIndex
+			bracketPairs[lastIndex] = i
+		}
+	}
+
+	// If we're done and we still have open brackets left, return an error
+	if len(tokenStack) != 0 {
+		return bracketPairs, errors.New("unmatched brackets")
+	}
+
+	return bracketPairs, nil
 }
 
 func getBFCode(filename string) string {
@@ -52,7 +77,7 @@ func tokenize(code string) []Token {
 }
 
 func main() {
-	FILE_NAME := "./Examples/helloWorld.bf"
+	FILE_NAME := "../Examples/helloWorld.bf"
 	code := getBFCode(FILE_NAME)
 	fmt.Println(code)
 }
