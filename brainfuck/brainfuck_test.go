@@ -134,3 +134,47 @@ func TestExtraClosingBracket(t *testing.T) {
 		return
 	}
 }
+
+func TestIncByte(t *testing.T) {
+	num := 5
+	expected := 6
+	actual := incByte(num)
+
+	if actual != expected {
+		t.Errorf("Expected: %d Actual: %d", expected, actual)
+		return
+	}
+}
+
+func TestIncByteOverflow(t *testing.T) {
+	num := 255
+	expected := 0
+	actual := incByte(num)
+
+	if actual != expected {
+		t.Errorf("Expected: %d Actual: %d", expected, actual)
+		return
+	}
+}
+
+func TestDecByte(t *testing.T) {
+	num := 5
+	expected := 4
+	actual := decByte(num)
+
+	if actual != expected {
+		t.Errorf("Expected: %d Actual: %d", expected, actual)
+		return
+	}
+}
+
+func TestIncByteUnderflow(t *testing.T) {
+	num := 0
+	expected := 255
+	actual := decByte(num)
+
+	if actual != expected {
+		t.Errorf("Expected: %d Actual: %d", expected, actual)
+		return
+	}
+}

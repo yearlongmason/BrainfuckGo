@@ -78,10 +78,38 @@ func tokenize(code string) []Token {
 	return tokens
 }
 
+func incByte(num int) int {
+	if num >= 255 {
+		return 0
+	}
+	return num + 1
+}
+
+func decByte(num int) int {
+	if num <= 0 {
+		return 255
+	}
+	return num - 1
+}
+
+func getInput() int {
+	var input int
+	fmt.Scan(&input)
+
+	// Validate input
+	if input < 0 {
+		return 0
+	} else if input > 255 {
+		return 255
+	}
+	return input
+}
+
 func interpret(tokens []Token) {
 	// Keep track of the current instruction and the data pointer
 	instructionPointer := 0
 	dataPointer := 0
+	data := make(map[int]int)
 
 	// Get matching brackets and make sure syntax is valid
 	matchingBrackets, err := getMatchingBrackets(tokens)
@@ -95,25 +123,40 @@ func interpret(tokens []Token) {
 		switch tokens[instructionPointer].token {
 		case ">":
 			// Increment the data pointer by one (to point to the next cell to the right)
+			dataPointer += 1
 		case "<":
 			// Decrement the data pointer by one (to point to the next cell to the left)
+			dataPointer -= 1
 		case "+":
 			// Increment the byte at the data pointer by one
+			data[dataPointer] = incByte(data[dataPointer])
 		case "-":
 			// Decrement the byte at the data pointer by one
+			data[dataPointer] = decByte(data[dataPointer])
 		case ".":
 			// Output the byte at the data pointer
+			fmt.Printf("%c", data[dataPointer])
 		case ",":
 			// Accept one byte of input, storing its value in the byte at the data pointer
+			data[dataPointer] = getInput()
 		case "[":
 			// If the byte at the data pointer is 0, then jump the instruction pointer forward to the command after the matching ]
+			if data[dataPointer] == 0 {
+				instructionPointer = matchingBrackets[instructionPointer]
+			}
 		case "]":
 			// If the byte at the data pointer is not 0, then jump the instruction pointer back to the command after the matching [
+			if data[dataPointer] != 0 {
+				instructionPointer = matchingBrackets[instructionPointer]
+			}
 		default:
 			// Otherwise there was an unexpected token
 			fmt.Println("ERROR: Unexpected token!")
 			return
 		}
+
+		// Incriment instruction pointer to move to the next token
+		instructionPointer += 1
 	}
 
 	// REMOVE AFTER finishing
@@ -122,7 +165,8 @@ func interpret(tokens []Token) {
 }
 
 func main() {
-	FILE_NAME := "../Examples/helloWorld.bf"
+	FILE_NAME := "../Examples/mandelbrot.bf"
 	code := getBFCode(FILE_NAME)
-	fmt.Println(code)
+	tokens := tokenize(code)
+	interpret(tokens)
 }
