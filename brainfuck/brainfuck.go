@@ -20,8 +20,8 @@ func getMatchingBrackets(tokens []Token) (map[int]int, error) {
 
 	// Loop through all tokens
 	for i, token := range tokens {
-		// If the current token is [ append it to the stack
 		switch token.token {
+		// If the current token is [ append it to the stack
 		case "[":
 			tokenStack = append(tokenStack, i)
 		case "]":
@@ -61,19 +61,64 @@ func getBFCode(filename string) string {
 func tokenize(code string) []Token {
 	codeLines := strings.Split(code, "\n")
 	tokens := make([]Token, 0)
+	var currentCharacter string
 
 	// Loop through each line of brainfuck code
 	for row, line := range codeLines {
 		// Loop through each column (index) of each row
 		for col := 0; col < len(line); col++ {
+			currentCharacter = string(codeLines[row][col])
 			// If the current character is a brainfuck character create a token and add it to tokens
-			if strings.Contains("><+-.,[]", string(codeLines[row][col])) {
-				tokens = append(tokens, Token{string(codeLines[row][col]), row + 1, col + 1})
+			if strings.Contains("><+-.,[]", currentCharacter) {
+				tokens = append(tokens, Token{currentCharacter, row + 1, col + 1})
 			}
 		}
 	}
 
 	return tokens
+}
+
+func interpret(tokens []Token) {
+	// Keep track of the current instruction and the data pointer
+	instructionPointer := 0
+	dataPointer := 0
+
+	// Get matching brackets and make sure syntax is valid
+	matchingBrackets, err := getMatchingBrackets(tokens)
+	if err != nil {
+		println("Invalid syntax: %v", err)
+		return
+	}
+
+	// Loop until we get past the last instruction (end of the program)
+	for instructionPointer < len(tokens) {
+		switch tokens[instructionPointer].token {
+		case ">":
+			// Increment the data pointer by one (to point to the next cell to the right)
+		case "<":
+			// Decrement the data pointer by one (to point to the next cell to the left)
+		case "+":
+			// Increment the byte at the data pointer by one
+		case "-":
+			// Decrement the byte at the data pointer by one
+		case ".":
+			// Output the byte at the data pointer
+		case ",":
+			// Accept one byte of input, storing its value in the byte at the data pointer
+		case "[":
+			// If the byte at the data pointer is 0, then jump the instruction pointer forward to the command after the matching ]
+		case "]":
+			// If the byte at the data pointer is not 0, then jump the instruction pointer back to the command after the matching [
+		default:
+			// Otherwise there was an unexpected token
+			fmt.Println("ERROR: Unexpected token!")
+			return
+		}
+	}
+
+	// REMOVE AFTER finishing
+	dataPointer += 0
+	matchingBrackets[-1] = 0
 }
 
 func main() {
