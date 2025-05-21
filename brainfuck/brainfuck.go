@@ -158,14 +158,24 @@ func interpret(tokens []Token) {
 		// Incriment instruction pointer to move to the next token
 		instructionPointer += 1
 	}
-
-	// REMOVE AFTER finishing
-	dataPointer += 0
-	matchingBrackets[-1] = 0
 }
 
 func main() {
-	FILE_NAME := "../Examples/mandelbrot.bf"
+	// Get command line arguments
+	args := os.Args
+
+	// Get the path to the program to run
+	var FILE_NAME string
+	if len(args) == 2 {
+		FILE_NAME = "../Examples/" + args[1]
+	} else {
+		// If the user does not specefy a file, run helloWorld.bf by default
+		FILE_NAME = "../Examples/helloWorld.bf"
+	}
+
+	// Get the code from the user specefied file
+	// Tokenize the code
+	// Run the interpreter on the tokens
 	code := getBFCode(FILE_NAME)
 	tokens := tokenize(code)
 	interpret(tokens)
