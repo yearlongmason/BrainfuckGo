@@ -155,7 +155,7 @@ func interpret(tokens []Token) {
 			return
 		}
 
-		// Incriment instruction pointer to move to the next token
+		// Increment instruction pointer to move to the next token
 		instructionPointer += 1
 	}
 }
